@@ -15,6 +15,8 @@
 		49041C4024B58CD00038930F /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 49041C3E24B58CD00038930F /* LaunchScreen.storyboard */; };
 		49041C4B24B58CD00038930F /* Gif_MakerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49041C4A24B58CD00038930F /* Gif_MakerTests.swift */; };
 		49041C5924B63BD00038930F /* ImagePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49041C5824B63BD00038930F /* ImagePicker.swift */; };
+		49041C5B24B655120038930F /* PlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49041C5A24B655120038930F /* PlayerView.swift */; };
+		49041C5D24B6784B0038930F /* GIF.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49041C5C24B6784B0038930F /* GIF.swift */; };
 		C1A27FD03FDB2EA9DF926F4F /* Pods_Gif_Maker.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 832055DC0D2334F683F8929D /* Pods_Gif_Maker.framework */; };
 		D862B84AAB32C0B694AD4F9A /* Pods_Gif_MakerTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D25319C2C84076E836CAA4ED /* Pods_Gif_MakerTests.framework */; };
 /* End PBXBuildFile section */
@@ -42,6 +44,8 @@
 		49041C4A24B58CD00038930F /* Gif_MakerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Gif_MakerTests.swift; sourceTree = "<group>"; };
 		49041C4C24B58CD00038930F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		49041C5824B63BD00038930F /* ImagePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagePicker.swift; sourceTree = "<group>"; };
+		49041C5A24B655120038930F /* PlayerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerView.swift; sourceTree = "<group>"; };
+		49041C5C24B6784B0038930F /* GIF.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GIF.swift; sourceTree = "<group>"; };
 		5BD0DDED8698D36A2F2956F1 /* Pods-Gif Maker.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Gif Maker.release.xcconfig"; path = "Target Support Files/Pods-Gif Maker/Pods-Gif Maker.release.xcconfig"; sourceTree = "<group>"; };
 		832055DC0D2334F683F8929D /* Pods_Gif_Maker.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Gif_Maker.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		BC04EAB193DB26F2DF2AB9A9 /* Pods-Gif Maker.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Gif Maker.debug.xcconfig"; path = "Target Support Files/Pods-Gif Maker/Pods-Gif Maker.debug.xcconfig"; sourceTree = "<group>"; };
@@ -104,8 +108,8 @@
 		49041C3224B58CCB0038930F /* Gif Maker */ = {
 			isa = PBXGroup;
 			children = (
+				49041C5E24B678500038930F /* Logic */,
 				49041C5524B58EC30038930F /* Views */,
-				49041C3724B58CCB0038930F /* ContentView.swift */,
 				49041C3324B58CCB0038930F /* AppDelegate.swift */,
 				49041C3524B58CCB0038930F /* SceneDelegate.swift */,
 				49041C3924B58CD00038930F /* Assets.xcassets */,
@@ -137,8 +141,18 @@
 			isa = PBXGroup;
 			children = (
 				49041C5824B63BD00038930F /* ImagePicker.swift */,
+				49041C5A24B655120038930F /* PlayerView.swift */,
+				49041C3724B58CCB0038930F /* ContentView.swift */,
 			);
 			path = Views;
+			sourceTree = "<group>";
+		};
+		49041C5E24B678500038930F /* Logic */ = {
+			isa = PBXGroup;
+			children = (
+				49041C5C24B6784B0038930F /* GIF.swift */,
+			);
+			path = Logic;
 			sourceTree = "<group>";
 		};
 		E593385BE7B3C767951921C3 /* Frameworks */ = {
@@ -318,9 +332,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				49041C5D24B6784B0038930F /* GIF.swift in Sources */,
 				49041C3424B58CCB0038930F /* AppDelegate.swift in Sources */,
 				49041C5924B63BD00038930F /* ImagePicker.swift in Sources */,
 				49041C3624B58CCB0038930F /* SceneDelegate.swift in Sources */,
+				49041C5B24B655120038930F /* PlayerView.swift in Sources */,
 				49041C3824B58CCB0038930F /* ContentView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
