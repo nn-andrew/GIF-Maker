@@ -11,10 +11,9 @@ import SwiftUI
 import AVFoundation
 
 struct ImagePicker: UIViewControllerRepresentable {
-//    @Environment(\.presentationMode) var presentationMode
-//    @Binding var image: UIImage?
     @Binding var movieURL: URL?
     @Binding var showPicker: Bool
+    @Binding var gif: GIF
 
     class Coordinator: NSObject, UINavigationControllerDelegate, UIImagePickerControllerDelegate {
         var parent: ImagePicker
@@ -25,11 +24,15 @@ struct ImagePicker: UIViewControllerRepresentable {
         
         func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
             if let movieURL = info[.mediaURL] as? URL {
-                parent.movieURL = movieURL
+                self.parent.movieURL = movieURL
+                 
+                // Setup GIF editing immediately after picking video
+                self.parent.gif.movieURL = parent.movieURL
+                self.parent.gif.generateFrames()
+                self.parent.gif.makeGIF(fileName: "user-gif")
             }
 
             self.parent.showPicker = false
-//            parent.presentationMode.wrappedValue.dismiss()
         }
     }
 

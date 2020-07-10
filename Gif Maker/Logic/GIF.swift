@@ -16,31 +16,24 @@ class GIF {
     
     var frames: [UIImage] = []
     var frameDelay = 0.1
+    var thumbnails: [UIImage] = []
     
     var gifURL: URL?
+    
+    private let thumbnailCount = 7
     
     init() {
         
     }
     
-    func makeGIF() {
-        self.generateFrames()
-        
-        do {
-            let name = try FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: true).appendingPathComponent("user-gif.gif")
-            self.convertFramesToGIF(with: self.frames, name: name as NSURL, frameDelay: self.frameDelay)
-        } catch {
-            print(error)
-        }
-    }
-    
-    private func generateFrames() {
+    func generateFrames() {
         let asset = AVURLAsset(url: self.movieURL!, options: nil)
         let videoDuration = asset.duration
         
         let generator = AVAssetImageGenerator(asset: asset)
         generator.requestedTimeToleranceAfter = .zero
         generator.requestedTimeToleranceBefore = .zero
+        generator.appliesPreferredTrackTransform = true
         // https://developer.apple.com/forums/thread/66332
 
         var frameForTimes = [NSValue]()
@@ -52,39 +45,58 @@ class GIF {
             let cmTime = CMTimeMake(value: Int64(i * step), timescale: Int32(videoDuration.timescale))
             frameForTimes.append(NSValue(time: cmTime))
         }
-      
-        generator.generateCGImagesAsynchronously(forTimes: frameForTimes, completionHandler: {requestedTime, image, actualTime, result, error in
-            DispatchQueue.main.async {
-                if let image = image {
-//                    print(requestedTime.value, requestedTime.seconds, actualTime.value)
-                    self.frames.append(UIImage(cgImage: image))
-                }
+        
+        // MARK: Generate images and add to frames array
+        for frame in frameForTimes {
+            do {
+                let image = try generator.copyCGImage(at: frame as! CMTime, actualTime: nil)
+                self.frames.append(UIImage(cgImage: image))
+            } catch {
+                print(error)
             }
-        })
+        }
+        
+        // MARK: Populate thumbnail array with some frames
+        let thumbnailStep = self.frames.count / self.thumbnailCount
+        for i in 0..<self.thumbnailCount {
+            self.thumbnails.append(self.frames[i * thumbnailStep])
+        }
+      
+//        generator.generateCGImagesAsynchronously(forTimes: frameForTimes, completionHandler: {requestedTime, image, actualTime, result, error in
+//            DispatchQueue.main.async {
+//                if let image = image {
+//                    self.frames.append(UIImage(cgImage: image))
+//                }
+//            }
+//        })
     }
     
-    private func convertFramesToGIF(with images: [UIImage], name: NSURL, frameDelay: Double) {
+//    func makeGIF(with images: [UIImage], fileName: String, frameDelay: Double) {
+    func makeGIF(fileName: String) {
+        do {
+            let destinationURL = try FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: true).appendingPathComponent(fileName) as NSURL
+            let destinationGIF = CGImageDestinationCreateWithURL(destinationURL, kUTTypeGIF, self.frames.count, nil)!
 
-        let destinationURL = name
-        let destinationGIF = CGImageDestinationCreateWithURL(destinationURL, kUTTypeGIF, images.count, nil)!
-
-        // This dictionary controls the delay between frames
-        // If you don't specify this, CGImage will apply a default delay
-        let properties = [
-            (kCGImagePropertyGIFDictionary as String): [(kCGImagePropertyGIFDelayTime as String): frameDelay]
-        ]
+            // This dictionary controls the delay between frames
+            // If you don't specify this, CGImage will apply a default delay
+            let properties = [
+                (kCGImagePropertyGIFDictionary as String): [(kCGImagePropertyGIFDelayTime as String): frameDelay]
+            ]
 
 
-        for img in images {
-            // Add the frame to the GIF image
-            var ciImage = CIImage(image: img)
-            var cgImage = self.convertCIImageToCGImage(inputImage: ciImage!)
-            
-            CGImageDestinationAddImage(destinationGIF, cgImage!, properties as CFDictionary)
+            for img in self.frames {
+                // Add the frame to the GIF image
+                var ciImage = CIImage(image: img)
+                var cgImage = self.convertCIImageToCGImage(inputImage: ciImage!)
+                
+                CGImageDestinationAddImage(destinationGIF, cgImage!, properties as CFDictionary)
+            }
+
+            // Write the GIF file to disk
+            CGImageDestinationFinalize(destinationGIF)
+        } catch {
+            print(error)
         }
-
-        // Write the GIF file to disk
-        CGImageDestinationFinalize(destinationGIF)
     }
     
     func convertCIImageToCGImage(inputImage: CIImage) -> CGImage! {
