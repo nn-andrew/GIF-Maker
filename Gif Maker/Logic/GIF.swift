@@ -27,6 +27,9 @@ class GIF {
     }
     
     func generateFrames() {
+        self.frames = []
+        self.thumbnails = []
+        
         let asset = AVURLAsset(url: self.movieURL!, options: nil)
         let videoDuration = asset.duration
         
@@ -37,11 +40,12 @@ class GIF {
         // https://developer.apple.com/forums/thread/66332
 
         var frameForTimes = [NSValue]()
-        let sampleCounts = 20
         let totalTimeLength = Int(videoDuration.seconds * Double(videoDuration.timescale))
-        let step = totalTimeLength / sampleCounts
+        let sampleCount = Int((videoDuration.seconds * 15).rounded(.down))
+        let step = totalTimeLength / sampleCount
+        self.frameDelay = videoDuration.seconds / Double(sampleCount)
       
-        for i in 0 ..< sampleCounts {
+        for i in 0 ..< sampleCount {
             let cmTime = CMTimeMake(value: Int64(i * step), timescale: Int32(videoDuration.timescale))
             frameForTimes.append(NSValue(time: cmTime))
         }

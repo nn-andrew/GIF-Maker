@@ -23,6 +23,7 @@ struct ImagePicker: UIViewControllerRepresentable {
         }
         
         func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+            self.parent.showPicker = false
             if let movieURL = info[.mediaURL] as? URL {
                 self.parent.movieURL = movieURL
                  
@@ -31,8 +32,6 @@ struct ImagePicker: UIViewControllerRepresentable {
                 self.parent.gif.generateFrames()
                 self.parent.gif.makeGIF(fileName: "user-gif")
             }
-
-            self.parent.showPicker = false
         }
     }
 
