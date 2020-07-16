@@ -12,11 +12,15 @@ import SwiftUI
 import MobileCoreServices
 
 class GIF {
+    static let shared = GIF()
+    
     var movieURL: URL?
     
     var frames: [UIImage] = []
     var frameDelay = 0.1
     var thumbnails: [UIImage] = []
+    
+    var cropRectRatio: RectRatio?
     
     var gifURL: URL?
     
@@ -53,7 +57,16 @@ class GIF {
         // MARK: Generate images and add to frames array
         for frame in frameForTimes {
             do {
-                let image = try generator.copyCGImage(at: frame as! CMTime, actualTime: nil)
+                var image = try generator.copyCGImage(at: frame as! CMTime, actualTime: nil)
+                if self.cropRectRatio != nil {
+                    var cropRect: CGRect = .zero
+                    cropRect.size.width = CGFloat(image.width) * self.cropRectRatio!.width
+                    cropRect.size.height = CGFloat(image.height) * self.cropRectRatio!.height
+                    cropRect.origin.x = CGFloat(image.width) * self.cropRectRatio!.originX
+                    cropRect.origin.y = CGFloat(image.height) * self.cropRectRatio!.originY
+                    
+                    image = image.cropping(to: cropRect)!
+                }
                 self.frames.append(UIImage(cgImage: image))
             } catch {
                 print(error)

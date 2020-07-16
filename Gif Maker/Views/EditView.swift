@@ -10,33 +10,67 @@ import SwiftUI
 
 struct EditView: View {
     
-    @Binding var gif: GIF
-    
+    @State var confirmChanges: Bool = false
     var body: some View {
         NavigationView {
-            GeometryReader { geo in
-                VStack {
-                    self.trimView
-                        .frame(width: geo.size.width * 0.95, height: geo.size.height * 0.08)
-                        .border(Color.blue)
+            ZStack {
+//                Colors.gray6
+//                    .edgesIgnoringSafeArea(.all)
+                GeometryReader { geo in
+                    VStack(spacing: 0) {
+                        self.trimView // * 0.95 originally
+                            .frame(width: geo.size.width * 0.85, height: geo.size.height * 0.08)
+                            .clipped()
+                            .border(Color.blue)
+                        
+                        ZStack {
+                            self.framesView
+                            
+                            if self.isPresentingCropView {
+                                VStack(spacing: 0) {
+                                    CropView()
+                                        .animation(.linear(duration: 0.12))
+                                }
+                            }
+                        }
+                        .frame(width: geo.size.width * 0.6, height: geo.size.height * 0.6)
+                        .padding(30)
+                        
+                        ZStack {
+                            GeometryReader { bottomGeo in
+                                VStack(spacing: 0) {
+                                    self.toolsView
+                                    
+                                    self.playButtonView
+                                }
+                                if self.isPresentingCropView {
+                                    VStack(spacing: 0) {
+                                        CropToolsView()
+                                            .animation(.linear(duration: 0.12))
+                                            .transition(.move(edge: .bottom))
+    //                                        .frame(width: geo.size.width, height: geo.size.height)
+                                        
+                                        ConfirmationView(isPresentingView: self.$isPresentingCropView)
+                                    }
+                                }
+                            }
+                        }
+                        .frame(width: geo.size.width, height: geo.size.height * 0.2)
                     
-                    self.framesView
-                        .frame(width: geo.size.width * 0.4, height: geo.size.height * 0.4)
-
-                    self.toolsView
-                    
-                    self.playButtonView
+                    }
+                    .frame(width: geo.size.width, height: geo.size.height)
                 }
-                .frame(width: geo.size.width, height: geo.size.height)
             }
         }
         .navigationBarTitle(Text(""))
         .navigationBarHidden(true)
         .onAppear(perform: {
-            self.trimEndFrameIndex = self.gif.frames.count-1
+            self.trimEndFrameIndex = GIF.shared.frames.count-1
         })
     }
     
+    
+    // MARK: Trim View
     @State var trimStartOffset = CGSize(width: 0, height: 0)
     @State var trimStartOffsetAccumulate = CGSize(width: 0, height: 0)
     @State var trimEndOffset = CGSize(width: 0, height: 0)
@@ -48,11 +82,11 @@ struct EditView: View {
         GeometryReader { geo in
             ZStack {
                 HStack(spacing: 0) {
-                    ForEach(0..<self.gif.thumbnails.count) { i in
-                        Image(uiImage: self.gif.thumbnails[i])
+                    ForEach(0..<GIF.shared.thumbnails.count) { i in
+                        Image(uiImage: GIF.shared.thumbnails[i])
                             .resizable()
                             .aspectRatio(contentMode: .fill)
-                            .frame(width: geo.size.height, height: geo.size.height)
+                            .frame(width: geo.size.width / 7, height: geo.size.width / 7)
                             .clipped()
                     }
                 }
@@ -76,7 +110,7 @@ struct EditView: View {
                                 self.trimStartOffset.width = min(max(gesture.translation.width + self.trimStartOffsetAccumulate.width, 0), geo.size.width * 0.95 + self.trimEndOffset.width)
                                 
                                 self.pauseFrames()
-                                self.trimStartFrameIndex = Int(self.trimStartOffset.width) * self.gif.frames.count / Int(geo.size.width)
+                                self.trimStartFrameIndex = Int(self.trimStartOffset.width) * (GIF.shared.frames.count-1) / Int(geo.size.width)
                                 self.frameIndex = self.trimStartFrameIndex
                             }
                             .onEnded { gesture in
@@ -106,7 +140,7 @@ struct EditView: View {
                                 self.trimEndOffset.width = min(max(gesture.translation.width + self.trimEndOffsetAccumulate.width, -geo.size.width * 0.95 + self.trimStartOffset.width), 0)
                                 
                                 self.pauseFrames()
-                                self.trimEndFrameIndex = self.gif.frames.count + Int(self.trimEndOffset.width) * self.gif.frames.count / Int(geo.size.width)
+                                self.trimEndFrameIndex = (GIF.shared.frames.count-1) + Int(self.trimEndOffset.width) * (GIF.shared.frames.count-1) / Int(geo.size.width)
                                 self.frameIndex = self.trimEndFrameIndex
                             }
                             .onEnded { gesture in
@@ -122,8 +156,6 @@ struct EditView: View {
                     
                     
                 }
-//                RSlider(lowerValue: self.$trimStart, upperValue: self.$trimEnd, minimumValue: 0, maximumValue: Double(self.gif.frames.count-1))
-                    
             }
             .frame(width: geo.size.width, height: geo.size.height)
             .onAppear(perform: {
@@ -136,38 +168,46 @@ struct EditView: View {
     // MARK: Play Button
     @State var isPlaying = true
     var playButtonView: some View {
-        Button(action: {
-            self.isPlaying.toggle()
-            if self.isPlaying {
-                self.playFrames()
-            } else {
-                self.pauseFrames()
+        ZStack {
+            Colors.gray6
+                .edgesIgnoringSafeArea(.all)
+            Button(action: {
+                self.isPlaying.toggle()
+                if self.isPlaying {
+                    self.playFrames()
+                } else {
+                    self.pauseFrames()
+                }
+            }) {
+                Text(self.isPlaying ? "Pause" : "Play")
             }
-        }) {
-            Text(self.isPlaying ? "Pause" : "Play")
         }
     }
     
     // MARK: Frames
     @State var frameIndex = 0
     @State var timer: Timer?
+    @State var geoFramesView: GeometryProxy?
     var framesView: some View {
         // Frame to show in editor
         
-        return VStack {
-            Image(uiImage: self.gif.frames[min(self.frameIndex, self.gif.frames.count-1)])
-                .resizable()
-                .scaledToFit()
+        return GeometryReader { geo in
+            VStack(spacing: 0) {
+                Image(uiImage: GIF.shared.frames[self.frameIndex])
+                    .resizable()
+                    .scaledToFit()
+            }
+            .frame(width: geo.size.width, height: geo.size.height)
+            .onAppear(perform: {
+                self.geoFramesView = geo
+                self.playFrames()
+            })
         }
-        .onAppear(perform: {
-            self.playFrames()
-        })
     }
     
     func playFrames() {
-//        self.frameIndex = 0
         self.timer?.invalidate()
-        self.timer = Timer.scheduledTimer(withTimeInterval: self.gif.frameDelay, repeats: true, block: { timer in
+        self.timer = Timer.scheduledTimer(withTimeInterval: GIF.shared.frameDelay, repeats: true, block: { timer in
             if self.frameIndex >= self.trimEndFrameIndex {
                 self.frameIndex = self.trimStartFrameIndex
             } else {
@@ -182,16 +222,24 @@ struct EditView: View {
     
     
     // MARK: Tools Menu
-    @State var presentCropView = false
+    @State var isPresentingCropView = false
     var toolsView: some View {
-        ScrollView(.horizontal, showsIndicators: false) {
-            HStack {
-                Button(action: {
-                    self.presentCropView = true
-                }) {
-                    Text("Crop")
+        GeometryReader { geo in
+            ZStack {
+                Colors.gray6
+                    .edgesIgnoringSafeArea(.all)
+                ScrollView(.horizontal, showsIndicators: false) {
+                    HStack {
+                        Button(action: {
+                            self.isPresentingCropView.toggle()
+                        }) {
+                            Text("Crop")
+                        }
+                    }
                 }
+                .scaledToFill()
             }
+            .frame(width: geo.size.width, height: geo.size.height)
         }
     }
 }

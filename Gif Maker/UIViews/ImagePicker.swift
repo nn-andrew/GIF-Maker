@@ -13,7 +13,6 @@ import AVFoundation
 struct ImagePicker: UIViewControllerRepresentable {
     @Binding var movieURL: URL?
     @Binding var showPicker: Bool
-    @Binding var gif: GIF
 
     class Coordinator: NSObject, UINavigationControllerDelegate, UIImagePickerControllerDelegate {
         var parent: ImagePicker
@@ -28,9 +27,9 @@ struct ImagePicker: UIViewControllerRepresentable {
                 self.parent.movieURL = movieURL
                  
                 // Setup GIF editing immediately after picking video
-                self.parent.gif.movieURL = parent.movieURL
-                self.parent.gif.generateFrames()
-                self.parent.gif.makeGIF(fileName: "user-gif")
+                GIF.shared.movieURL = parent.movieURL
+                GIF.shared.generateFrames()
+                GIF.shared.makeGIF(fileName: "user-gif")
             }
         }
     }
