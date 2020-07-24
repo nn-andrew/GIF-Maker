@@ -20,11 +20,21 @@
 		49041C6224B7C3720038930F /* GallerySelectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49041C6124B7C3720038930F /* GallerySelectionView.swift */; };
 		49041C6424B7D5880038930F /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49041C6324B7D5880038930F /* Extensions.swift */; };
 		49041C6924B836460038930F /* EditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49041C6824B836460038930F /* EditView.swift */; };
+		49AF7D6424CA837E0032823F /* Rubik-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 49ECDE0424CA37230095B102 /* Rubik-Bold.ttf */; };
+		49AF7D6824CABC380032823F /* FinishedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49AF7D6724CABC380032823F /* FinishedView.swift */; };
 		49CD747024BD157200640F88 /* CropView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49CD746F24BD157200640F88 /* CropView.swift */; };
-		49CD747224BE673600640F88 /* CropToolsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49CD747124BE673600640F88 /* CropToolsView.swift */; };
+		49CD747224BE673600640F88 /* CropToolbarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49CD747124BE673600640F88 /* CropToolbarView.swift */; };
 		49CD747424BE6D0C00640F88 /* Colors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49CD747324BE6D0C00640F88 /* Colors.swift */; };
 		49CD747824BE8B7D00640F88 /* ConfirmationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49CD747724BE8B7D00640F88 /* ConfirmationView.swift */; };
 		49CD747A24C01FA900640F88 /* CropView2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49CD747924C01FA900640F88 /* CropView2.swift */; };
+		49CD747D24C129F200640F88 /* ToolbarSelections.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49CD747C24C129F200640F88 /* ToolbarSelections.swift */; };
+		49CD747F24C217B800640F88 /* AdjustmentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49CD747E24C217B800640F88 /* AdjustmentView.swift */; };
+		49CD748124C21ED800640F88 /* AdjustmentToolbarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49CD748024C21ED800640F88 /* AdjustmentToolbarView.swift */; };
+		49ECDDF624C4DA550095B102 /* TextOverlayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49ECDDF524C4DA550095B102 /* TextOverlayView.swift */; };
+		49ECDDF924C4F7730095B102 /* TextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49ECDDF824C4F7730095B102 /* TextView.swift */; };
+		49ECDDFB24C5249B0095B102 /* TextOverlayToolbarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49ECDDFA24C5249B0095B102 /* TextOverlayToolbarView.swift */; };
+		49ECDDFF24C6982E0095B102 /* Monaco.dfont in Resources */ = {isa = PBXBuildFile; fileRef = 49ECDDFE24C6982E0095B102 /* Monaco.dfont */; };
+		49ECDE0324CA354F0095B102 /* Montserrat-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 49ECDE0224CA354F0095B102 /* Montserrat-Bold.ttf */; };
 		D862B84AAB32C0B694AD4F9A /* Pods_Gif_MakerTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D25319C2C84076E836CAA4ED /* Pods_Gif_MakerTests.framework */; };
 /* End PBXBuildFile section */
 
@@ -56,11 +66,21 @@
 		49041C6124B7C3720038930F /* GallerySelectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GallerySelectionView.swift; sourceTree = "<group>"; };
 		49041C6324B7D5880038930F /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		49041C6824B836460038930F /* EditView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditView.swift; sourceTree = "<group>"; };
+		49AF7D6724CABC380032823F /* FinishedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FinishedView.swift; sourceTree = "<group>"; };
 		49CD746F24BD157200640F88 /* CropView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CropView.swift; sourceTree = "<group>"; };
-		49CD747124BE673600640F88 /* CropToolsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CropToolsView.swift; sourceTree = "<group>"; };
+		49CD747124BE673600640F88 /* CropToolbarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CropToolbarView.swift; sourceTree = "<group>"; };
 		49CD747324BE6D0C00640F88 /* Colors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Colors.swift; sourceTree = "<group>"; };
 		49CD747724BE8B7D00640F88 /* ConfirmationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfirmationView.swift; sourceTree = "<group>"; };
 		49CD747924C01FA900640F88 /* CropView2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CropView2.swift; sourceTree = "<group>"; };
+		49CD747C24C129F200640F88 /* ToolbarSelections.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToolbarSelections.swift; sourceTree = "<group>"; };
+		49CD747E24C217B800640F88 /* AdjustmentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdjustmentView.swift; sourceTree = "<group>"; };
+		49CD748024C21ED800640F88 /* AdjustmentToolbarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdjustmentToolbarView.swift; sourceTree = "<group>"; };
+		49ECDDF524C4DA550095B102 /* TextOverlayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextOverlayView.swift; sourceTree = "<group>"; };
+		49ECDDF824C4F7730095B102 /* TextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextView.swift; sourceTree = "<group>"; };
+		49ECDDFA24C5249B0095B102 /* TextOverlayToolbarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextOverlayToolbarView.swift; sourceTree = "<group>"; };
+		49ECDDFE24C6982E0095B102 /* Monaco.dfont */ = {isa = PBXFileReference; lastKnownFileType = file; path = Monaco.dfont; sourceTree = "<group>"; };
+		49ECDE0224CA354F0095B102 /* Montserrat-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Montserrat-Bold.ttf"; sourceTree = "<group>"; };
+		49ECDE0424CA37230095B102 /* Rubik-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Rubik-Bold.ttf"; sourceTree = "<group>"; };
 		5BD0DDED8698D36A2F2956F1 /* Pods-Gif Maker.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Gif Maker.release.xcconfig"; path = "Target Support Files/Pods-Gif Maker/Pods-Gif Maker.release.xcconfig"; sourceTree = "<group>"; };
 		832055DC0D2334F683F8929D /* Pods_Gif_Maker.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Gif_Maker.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		BC04EAB193DB26F2DF2AB9A9 /* Pods-Gif Maker.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Gif Maker.debug.xcconfig"; path = "Target Support Files/Pods-Gif Maker/Pods-Gif Maker.debug.xcconfig"; sourceTree = "<group>"; };
@@ -122,9 +142,13 @@
 		49041C3224B58CCB0038930F /* Gif Maker */ = {
 			isa = PBXGroup;
 			children = (
+				49ECDE0424CA37230095B102 /* Rubik-Bold.ttf */,
+				49ECDE0224CA354F0095B102 /* Montserrat-Bold.ttf */,
+				49ECDDFE24C6982E0095B102 /* Monaco.dfont */,
+				49CD747B24C1291B00640F88 /* Models */,
 				49041C5E24B678500038930F /* Logic */,
-				49041C6524B7DF610038930F /* UIViews */,
 				49041C5524B58EC30038930F /* Views */,
+				49041C6524B7DF610038930F /* UIViews */,
 				49CD747324BE6D0C00640F88 /* Colors.swift */,
 				49041C3324B58CCB0038930F /* AppDelegate.swift */,
 				49041C3524B58CCB0038930F /* SceneDelegate.swift */,
@@ -156,10 +180,12 @@
 		49041C5524B58EC30038930F /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				49ECDDF724C4F73F0095B102 /* UIViews */,
 				49CD746C24BD14AE00640F88 /* Subviews */,
 				49041C6824B836460038930F /* EditView.swift */,
-				49041C3724B58CCB0038930F /* ContentView.swift */,
+				49AF7D6724CABC380032823F /* FinishedView.swift */,
 				49041C6124B7C3720038930F /* GallerySelectionView.swift */,
+				49041C3724B58CCB0038930F /* ContentView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -185,12 +211,32 @@
 		49CD746C24BD14AE00640F88 /* Subviews */ = {
 			isa = PBXGroup;
 			children = (
+				49ECDDF524C4DA550095B102 /* TextOverlayView.swift */,
+				49ECDDFA24C5249B0095B102 /* TextOverlayToolbarView.swift */,
 				49CD746F24BD157200640F88 /* CropView.swift */,
-				49CD747924C01FA900640F88 /* CropView2.swift */,
-				49CD747124BE673600640F88 /* CropToolsView.swift */,
+				49CD747124BE673600640F88 /* CropToolbarView.swift */,
 				49CD747724BE8B7D00640F88 /* ConfirmationView.swift */,
+				49CD747924C01FA900640F88 /* CropView2.swift */,
+				49CD747E24C217B800640F88 /* AdjustmentView.swift */,
+				49CD748024C21ED800640F88 /* AdjustmentToolbarView.swift */,
 			);
 			path = Subviews;
+			sourceTree = "<group>";
+		};
+		49CD747B24C1291B00640F88 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				49CD747C24C129F200640F88 /* ToolbarSelections.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		49ECDDF724C4F73F0095B102 /* UIViews */ = {
+			isa = PBXGroup;
+			children = (
+				49ECDDF824C4F7730095B102 /* TextView.swift */,
+			);
+			path = UIViews;
 			sourceTree = "<group>";
 		};
 		E593385BE7B3C767951921C3 /* Frameworks */ = {
@@ -285,8 +331,11 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				49ECDE0324CA354F0095B102 /* Montserrat-Bold.ttf in Resources */,
+				49AF7D6424CA837E0032823F /* Rubik-Bold.ttf in Resources */,
 				49041C4024B58CD00038930F /* LaunchScreen.storyboard in Resources */,
 				49041C3D24B58CD00038930F /* Preview Assets.xcassets in Resources */,
+				49ECDDFF24C6982E0095B102 /* Monaco.dfont in Resources */,
 				49041C3A24B58CD00038930F /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -357,14 +406,21 @@
 				49CD747424BE6D0C00640F88 /* Colors.swift in Sources */,
 				49041C5924B63BD00038930F /* ImagePicker.swift in Sources */,
 				49041C6424B7D5880038930F /* Extensions.swift in Sources */,
-				49CD747224BE673600640F88 /* CropToolsView.swift in Sources */,
+				49CD747224BE673600640F88 /* CropToolbarView.swift in Sources */,
 				49041C3624B58CCB0038930F /* SceneDelegate.swift in Sources */,
 				49041C6924B836460038930F /* EditView.swift in Sources */,
+				49AF7D6824CABC380032823F /* FinishedView.swift in Sources */,
 				49CD747824BE8B7D00640F88 /* ConfirmationView.swift in Sources */,
 				49CD747024BD157200640F88 /* CropView.swift in Sources */,
 				49041C6224B7C3720038930F /* GallerySelectionView.swift in Sources */,
 				49041C5B24B655120038930F /* PlayerView.swift in Sources */,
+				49ECDDFB24C5249B0095B102 /* TextOverlayToolbarView.swift in Sources */,
+				49ECDDF624C4DA550095B102 /* TextOverlayView.swift in Sources */,
+				49CD747F24C217B800640F88 /* AdjustmentView.swift in Sources */,
 				49041C3824B58CCB0038930F /* ContentView.swift in Sources */,
+				49CD747D24C129F200640F88 /* ToolbarSelections.swift in Sources */,
+				49CD748124C21ED800640F88 /* AdjustmentToolbarView.swift in Sources */,
+				49ECDDF924C4F7730095B102 /* TextView.swift in Sources */,
 				49CD747A24C01FA900640F88 /* CropView2.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

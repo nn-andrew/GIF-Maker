@@ -9,19 +9,49 @@
 import SwiftUI
 
 struct ConfirmationView: View {
-    @Binding var isPresentingView: Bool
+    let toolbar = ToolbarSelections.shared
+    
+    @Binding var currentMenu: Menu
     var body: some View {
         HStack {
             Button(action: {
-                self.isPresentingView = false
+                self.currentMenu = .main
+                
+                self.toolbar.saturationAmount = 1.0
+                self.toolbar.brightnessAmount = 0.0
+                self.toolbar.contrastAmount = 1.0
             }) {
-                Text("Cancel")
+                    Rectangle()
+                        .fill(Colors.primary)
+                        .frame(width: 20, height: 20)
+                        .mask(
+                            Image("cancel_button")
+                                .resizable()
+                                .scaledToFit()
+                        )
             }
+            
+            Spacer()
+            
             Button(action: {
-                self.isPresentingView = false
+                if self.currentMenu == .textOverlay && self.toolbar.currentTextOverlay != nil {
+                    self.toolbar.textOverlays.append(self.toolbar.currentTextOverlay!)
+//                    self.toolbar.currentTextOverlay = nil
+                }
+                
+                self.currentMenu = .main
+                
                 GIF.shared.generateFrames()
+                GIF.shared.calculateContextRect()
             }) {
-                Text("Confirm")
+                Rectangle()
+                    .fill(Colors.primary)
+                .frame(width: 30, height: 30)
+                .mask(
+                    Image("confirm_button")
+                        .resizable()
+                        .scaledToFit()
+                )
             }
         }
     }

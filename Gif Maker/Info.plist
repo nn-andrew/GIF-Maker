@@ -2,6 +2,14 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>UIAppFonts</key>
+	<array>
+		<string>Montserrat-Bold.ttf</string>
+		<string>Rubik-Bold.ttf</string>
+		<string>Monaco.dfont</string>
+	</array>
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>Save GIF to your gallery</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>Choose to turn into GIFs</string>
 	<key>CFBundleDevelopmentRegion</key>

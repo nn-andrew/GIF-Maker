@@ -1,5 +1,5 @@
 //
-//  CropToolsView.swift
+//  CropToolbarView.swift
 //  Gif Maker
 //
 //  Created by Andrew Nguyen on 7/14/20.
@@ -8,48 +8,49 @@
 
 import SwiftUI
 
-struct CropToolsView: View {
+struct CropToolbarView: View {
+    let toolbar = ToolbarSelections.shared
+    
     var body: some View {
         GeometryReader { geo in
             HStack {
                 Button(action: {
-                    
+                    self.toolbar.cropRatio = .free
                 }) {
                     Text("Custom")
                 }
                 
                 Button(action: {
-                    
+                    self.toolbar.cropRatio = .r1x1
                 }) {
                     Text("Square")
                 }
                 
                 Button(action: {
-                    
+                    self.toolbar.cropRatio = .r4x3
                 }) {
                     Text("4:3")
                 }
                 
                 Button(action: {
-                    
+                    self.toolbar.cropRatio = .r3x2
                 }) {
                     Text("3:2")
                 }
                 
                 Button(action: {
-                    
+                    self.toolbar.cropRatio = .r16x9
                 }) {
                     Text("16:9")
                 }
             }
             .frame(width: geo.size.width, height: geo.size.height)
-            .background(Colors.gray6)
         }
     }
 }
 
-struct CropToolsView_Previews: PreviewProvider {
+struct CropToolbarView_Previews: PreviewProvider {
     static var previews: some View {
-        CropToolsView()
+        CropToolbarView()
     }
 }

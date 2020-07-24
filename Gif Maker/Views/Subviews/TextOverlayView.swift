@@ -1,15 +1,14 @@
 //
-//  CropView.swift
+//  TextOverlayView.swift
 //  Gif Maker
 //
-//  Created by Andrew Nguyen on 7/13/20.
+//  Created by Andrew Nguyen on 7/19/20.
 //  Copyright © 2020 six. All rights reserved.
 //
 
 import SwiftUI
 
-struct CropView: View {
-    
+struct TextOverlayView: View {
     @ObservedObject var toolbar = ToolbarSelections.shared
     
     @State var geoSize: CGSize = .zero
@@ -28,8 +27,17 @@ struct CropView: View {
         }
     }
     
-    // used for knowing how to crop the original cgImages
-    @State var cropRectRatio: RectRatio = RectRatio()
+    @State var textOverlay: TextOverlay = TextOverlay()
+    @State var textOverlayRectRatio: RectRatio = RectRatio()
+    @State var text: String = ToolbarSelections.shared.currentTextOverlay?.text ?? ""
+    var font: UIFont = ToolbarSelections.shared.currentTextOverlay?.font ?? UIFont.systemFont(ofSize: 40)
+//    var font: UIFont = ToolbarSelections.shared.currentTextOverlay?.font ?? UIFont.systemFont(ofSize: 40)
+    var fontSize: CGFloat = ToolbarSelections.shared.currentTextOverlay?.fontSize ?? 40
+//    var fontSize: CGFloat = ToolbarSelections.shared.currentTextOverlay?.fontSize ?? 40
+    var textColor: UIColor = ToolbarSelections.shared.currentTextOverlay?.color ?? .white
+//    var textColor: UIColor = ToolbarSelections.shared.currentTextOverlay?.color ?? .white
+    
+    @State var isNewTextOverlay: Bool = true
     
     let cornerSize: CGFloat = 80
     
@@ -51,16 +59,16 @@ struct CropView: View {
             ZStack {
                 
                 Rectangle()
-                    .fill(Color.black)
+                    .fill(Color.clear)
                     .frame(width: geo.size.width, height: geo.size.height)
                     .mask(
                         self.cropArea
                             .fill(style: FillStyle(eoFill: true))
                     )
-                    .opacity(0.8)
+//                    .opacity(0.2)
                     .gesture(
                         DragGesture()
-                            .onChanged() { gesture in                                
+                            .onChanged() { gesture in
                                 if gesture.translation.width < 0 {
                                     self.offsetTL.width = min(max(gesture.translation.width + self.offsetTLAccumulate.width, 0), geo.size.width)
                                     self.offsetBL.width = min(max(gesture.translation.width + self.offsetBLAccumulate.width, 0), geo.size.width)
@@ -98,24 +106,8 @@ struct CropView: View {
                                     }
                                 }
                                 
-                                
-//                                self.offsetTL = CGSize(
-//                                    width: min(max(gesture.translation.width + self.offsetTLAccumulate.width, 0), geo.size.width),
-//                                    height: min(max(gesture.translation.height + self.offsetTLAccumulate.height, 0), geo.size.height))
-//
-//                                self.offsetTR = CGSize(
-//                                    width: min(max(gesture.translation.width + self.offsetTRAccumulate.width, -geo.size.width), 0),
-//                                    height: min(max(gesture.translation.height + self.offsetTRAccumulate.height, 0), geo.size.height))
-//
-//                                self.offsetBL = CGSize(
-//                                    width: min(max(gesture.translation.width + self.offsetBLAccumulate.width, 0), geo.size.width),
-//                                    height: min(max(gesture.translation.height + self.offsetBLAccumulate.height, -geo.size.height), 0))
-//
-//                                self.offsetBR = CGSize(
-//                                    width: min(max(gesture.translation.width + self.offsetBRAccumulate.width, -geo.size.width), 0),
-//                                    height: min(max(gesture.translation.height + self.offsetBRAccumulate.height, -geo.size.height), 0))
-                                
                                 self.calculateRatio(geo: geo)
+                                self.calculateFontSize(geo: geo)
                             }
                         .onEnded() { gesture in
                             self.offsetTLAccumulate = self.offsetTL
@@ -125,8 +117,68 @@ struct CropView: View {
                         }
                     )
                 
-                
-//                self.cropArea
+                TextView(textOverlay: self.$textOverlay, text: self.$text, font: self.font, color: self.textColor, fontSize: self.fontSize)
+                    .frame(
+                        width: geo.size.width + self.offsetTR.width - self.offsetTL.width,
+                        height: geo.size.height + self.offsetBL.height - self.offsetTL.height
+                    )
+                    .offset(x: (self.offsetTL.width + self.offsetTR.width) / 2, y: (self.offsetTL.height + self.offsetBL.height) / 2)
+//                    .font(.system(size: (geo.size.width + self.offsetTR.width - self.offsetTL.width) * 0.2))
+                    .gesture(
+                        DragGesture()
+                            .onChanged() { gesture in
+                                if gesture.translation.width < 0 {
+                                    self.offsetTL.width = min(max(gesture.translation.width + self.offsetTLAccumulate.width, 0), geo.size.width)
+                                    self.offsetBL.width = min(max(gesture.translation.width + self.offsetBLAccumulate.width, 0), geo.size.width)
+                                    
+                                    if self.offsetTL.width > 0 {
+                                        self.offsetTR.width = min(max(gesture.translation.width + self.offsetTRAccumulate.width, -geo.size.width), 0)
+                                        self.offsetBR.width = min(max(gesture.translation.width + self.offsetBRAccumulate.width, -geo.size.width), 0)
+                                    }
+                                } else {
+                                    
+                                    self.offsetTR.width = min(max(gesture.translation.width + self.offsetTRAccumulate.width, -geo.size.width), 0)
+                                    self.offsetBR.width = min(max(gesture.translation.width + self.offsetBRAccumulate.width, -geo.size.width), 0)
+                                    
+                                    if self.offsetTR.width < 0 {
+                                        self.offsetTL.width = min(max(gesture.translation.width + self.offsetTLAccumulate.width, 0), geo.size.width)
+                                        self.offsetBL.width = min(max(gesture.translation.width + self.offsetBLAccumulate.width, 0), geo.size.width)
+                                    }
+                                }
+                                
+                                if gesture.translation.height < 0 {
+                                    self.offsetTL.height = min(max(gesture.translation.height + self.offsetTLAccumulate.height, 0), geo.size.height)
+                                    self.offsetTR.height = min(max(gesture.translation.height + self.offsetTRAccumulate.height, 0), geo.size.height)
+                                    
+                                    if self.offsetTL.height > 0 {
+                                        self.offsetBL.height = min(max(gesture.translation.height + self.offsetBLAccumulate.height, -geo.size.height), 0)
+                                        self.offsetBR.height = min(max(gesture.translation.height + self.offsetBRAccumulate.height, -geo.size.height), 0)
+                                    }
+                                } else {
+                                    self.offsetBL.height = min(max(gesture.translation.height + self.offsetBLAccumulate.height, -geo.size.height), 0)
+                                    self.offsetBR.height = min(max(gesture.translation.height + self.offsetBRAccumulate.height, -geo.size.height), 0)
+                                    
+                                    if self.offsetBL.height < 0 {
+                                        self.offsetTL.height = min(max(gesture.translation.height + self.offsetTLAccumulate.height, 0), geo.size.height)
+                                        self.offsetTR.height = min(max(gesture.translation.height + self.offsetTRAccumulate.height, 0), geo.size.height)
+                                    }
+                                }
+                                
+                                self.calculateRatio(geo: geo)
+                                self.calculateFontSize(geo: geo)
+                            }
+                            .onEnded() { gesture in
+                                self.offsetTLAccumulate = self.offsetTL
+                                self.offsetTRAccumulate = self.offsetTR
+                                self.offsetBLAccumulate = self.offsetBL
+                                self.offsetBRAccumulate = self.offsetBR
+                                
+                                self.assignOffsetsToObject()
+                                self.assignOffsetAccumulatesToObject()
+                                self.textOverlay.width = self.textOverlayRectRatio.width * geo.size.width
+                                self.textOverlay.height = self.textOverlayRectRatio.height * geo.size.height
+                            }
+                )
                 
                 // Top Left
                 self.cropCorner
@@ -144,6 +196,7 @@ struct CropView: View {
                                 self.offsetBL.width = self.offsetTL.width
                                 
                                 self.calculateRatio(geo: geo)
+                                self.calculateFontSize(geo: geo)
                             })
                             .onEnded({ gesture in
                                 
@@ -151,6 +204,10 @@ struct CropView: View {
                                 self.offsetTRAccumulate.height = self.offsetTL.height
                                 self.offsetBLAccumulate.width = self.offsetTL.width
                                 
+                                self.assignOffsetsToObject()
+                                self.assignOffsetAccumulatesToObject()
+                                self.textOverlay.width = self.textOverlayRectRatio.width * geo.size.width
+                                self.textOverlay.height = self.textOverlayRectRatio.height * geo.size.height
                             })
                     )
                 
@@ -170,6 +227,7 @@ struct CropView: View {
                                 self.offsetBR.width = self.offsetTR.width
                                 
                                 self.calculateRatio(geo: geo)
+                                self.calculateFontSize(geo: geo)
                             })
                             .onEnded({ gesture in
                                 
@@ -177,6 +235,10 @@ struct CropView: View {
                                 self.offsetTLAccumulate.height = self.offsetTR.height
                                 self.offsetBRAccumulate.width = self.offsetTR.width
                                 
+                                self.assignOffsetsToObject()
+                                self.assignOffsetAccumulatesToObject()
+                                self.textOverlay.width = self.textOverlayRectRatio.width * geo.size.width
+                                self.textOverlay.height = self.textOverlayRectRatio.height * geo.size.height
                             })
                     )
                 
@@ -196,6 +258,7 @@ struct CropView: View {
                                 self.offsetBR.height = self.offsetBL.height
                                 
                                 self.calculateRatio(geo: geo)
+                                self.calculateFontSize(geo: geo)
                             })
                             .onEnded({ gesture in
                                 
@@ -203,6 +266,10 @@ struct CropView: View {
                                 self.offsetTLAccumulate.width = self.offsetBL.width
                                 self.offsetBRAccumulate.height = self.offsetBL.height
                                 
+                                self.assignOffsetsToObject()
+                                self.assignOffsetAccumulatesToObject()
+                                self.textOverlay.width = self.textOverlayRectRatio.width * geo.size.width
+                                self.textOverlay.height = self.textOverlayRectRatio.height * geo.size.height
                             })
                     )
                 
@@ -222,6 +289,7 @@ struct CropView: View {
                                 self.offsetTR.width = self.offsetBR.width
                                 
                                 self.calculateRatio(geo: geo)
+                                self.calculateFontSize(geo: geo)
                             })
                             .onEnded({ gesture in
                                 
@@ -229,26 +297,74 @@ struct CropView: View {
                                 self.offsetTRAccumulate.width = self.offsetTR.width
                                 self.offsetBLAccumulate.height = self.offsetBL.height
                                 
+                                self.assignOffsetsToObject()
+                                self.assignOffsetAccumulatesToObject()
+                                self.textOverlay.width = self.textOverlayRectRatio.width * geo.size.width
+                                self.textOverlay.height = self.textOverlayRectRatio.height * geo.size.height
                             })
                     )
             }
             .onAppear(perform: {
                 self.geoSize = geo.size
                 self.calculateRatio(geo: geo)
+                self.calculateFontSize(geo: geo)
+                
+                if self.toolbar.textOverlays.first(where: {$0.id == self.textOverlay.id}) == nil {
+                    self.toolbar.currentTextOverlay = self.textOverlay
+                } else {
+                    self.text = self.textOverlay.text
+                    self.assignOffsetsToSelf()
+                    self.assignOffsetAccumulatesToSelf()
+                    
+                    self.calculateRatio(geo: geo)
+                    self.calculateFontSize(geo: geo)
+                    self.isNewTextOverlay = false
+                    
+                    self.toolbar.currentTextOverlay = nil
+                }
             })
         }
     }
     
     func calculateRatio(geo: GeometryProxy) {
-        self.cropRectRatio.width = (geo.size.width + self.offsetTR.width - self.offsetTL.width) / geo.size.width
-        self.cropRectRatio.height = (geo.size.height + self.offsetBL.height - self.offsetTL.height) / geo.size.height
-        self.cropRectRatio.originX = self.offsetTL.width / geo.size.width
-        self.cropRectRatio.originY = self.offsetTL.height / geo.size.height
+        self.textOverlayRectRatio.width = (geo.size.width + self.offsetTR.width - self.offsetTL.width) / geo.size.width
+        self.textOverlayRectRatio.height = (geo.size.height + self.offsetBL.height - self.offsetTL.height) / geo.size.height
+        self.textOverlayRectRatio.originX = self.offsetTL.width / geo.size.width
+        self.textOverlayRectRatio.originY = self.offsetTL.height / geo.size.height
         
-        GIF.shared.cropRectRatio = self.cropRectRatio
-//        print(GIF.shared.cropRectRatio)
-        
-        GIF.shared.calculateContextRect()
+        self.textOverlay.rectRatio = self.textOverlayRectRatio
+    }
+    
+    func calculateFontSize(geo: GeometryProxy) {
+        self.textOverlay.fontSize = (geo.size.width + self.offsetTR.width - self.offsetTL.width) * 0.2
+    }
+    
+    func assignOffsetsToObject() {
+        self.textOverlay.offsetTL = self.offsetTL.self
+        self.textOverlay.offsetTR = self.offsetTR.self
+        self.textOverlay.offsetBL = self.offsetBL.self
+        self.textOverlay.offsetBR = self.offsetBR.self
+    }
+    
+    func assignOffsetsToSelf() {
+        self.offsetTL = self.textOverlay.offsetTL
+        self.offsetTR = self.textOverlay.offsetTR
+        self.offsetBL = self.textOverlay.offsetBL
+        self.offsetBR = self.textOverlay.offsetBR
+    }
+    
+    func assignOffsetAccumulatesToObject() {
+        self.textOverlay.offsetTLAccumulate = self.offsetTLAccumulate.self
+        self.textOverlay.offsetTRAccumulate = self.offsetTRAccumulate.self
+        self.textOverlay.offsetBLAccumulate = self.offsetBLAccumulate.self
+        self.textOverlay.offsetBRAccumulate = self.offsetBRAccumulate.self
+    }
+    
+    func assignOffsetAccumulatesToSelf() {
+        self.offsetTLAccumulate = self.textOverlay.offsetTLAccumulate
+        self.offsetTRAccumulate = self.textOverlay.offsetTRAccumulate
+        self.offsetBLAccumulate = self.textOverlay.offsetBLAccumulate
+        self.offsetBRAccumulate = self.textOverlay.offsetBRAccumulate
     }
     
     var cropCorner: some View {
@@ -258,20 +374,20 @@ struct CropView: View {
                 .opacity(0.005)
                 .frame(width: self.cornerSize, height: self.cornerSize)
             Rectangle()
-                .fill(Color.yellow)
+                .fill(Color.white)
                 .frame(width: 20, height: 20)
                 .mask(
                     Image("crop_corner")
                         .resizable()
                         .scaledToFit()
                 )
+                .opacity(self.isNewTextOverlay ? 1.0 : 0.4)
         }
-//        .border(Color.blue)
     }
 }
 
-//struct CropView_Previews: PreviewProvider {
+//struct TextOverlayView_Previews: PreviewProvider {
 //    static var previews: some View {
-//        CropView()
+//        TextOverlayView()
 //    }
 //}
