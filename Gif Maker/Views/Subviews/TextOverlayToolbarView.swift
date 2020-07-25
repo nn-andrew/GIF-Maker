@@ -170,6 +170,44 @@ struct TextOverlayToolbarView: View {
                             }
                             .frame(minWidth: 60)
                         }
+                        
+                        Button(action: {
+                            self.toolbar.currentTextOverlay?.font = UIFont(name: "Roboto-Bold", size: self.toolbar.currentTextOverlay?.fontSize ?? 12)!
+                            self.currentFont = .roboto
+                        }) {
+                            VStack(spacing: 0) {
+                                ZStack {
+                                    Circle()
+                                        .fill(self.currentFont == .roboto ? Colors.primary : Color.clear)
+                                        .frame(width: 64, height: 64)
+                                    FontImage(fontName: "Roboto-Bold")
+                                }
+                                    
+                                Text("Roboto")
+                                    .foregroundColor(Colors.primary)
+                                    .font(.system(size: 14))
+                            }
+                            .frame(minWidth: 60)
+                        }
+                        
+                        Button(action: {
+                            self.toolbar.currentTextOverlay?.font = UIFont(name: "Caveat-Regular", size: self.toolbar.currentTextOverlay?.fontSize ?? 12)!
+                            self.currentFont = .caveat
+                        }) {
+                            VStack(spacing: 0) {
+                                ZStack {
+                                    Circle()
+                                        .fill(self.currentFont == .caveat ? Colors.primary : Color.clear)
+                                        .frame(width: 64, height: 64)
+                                    FontImage(fontName: "Caveat-Regular")
+                                }
+                                    
+                                Text("Caveat")
+                                    .foregroundColor(Colors.primary)
+                                    .font(.system(size: 14))
+                            }
+                            .frame(minWidth: 60)
+                        }
                     }
                 }
                 .scaledToFill()

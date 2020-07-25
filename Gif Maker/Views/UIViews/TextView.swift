@@ -10,7 +10,7 @@ import SwiftUI
 
 struct TextView: UIViewRepresentable {
     @Binding var textOverlay: TextOverlay
-    @Binding var text: String
+    var text: String
     var font: UIFont
     var color: UIColor
     var fontSize: CGFloat

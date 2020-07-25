@@ -26,20 +26,23 @@ struct ImagePicker: UIViewControllerRepresentable {
             if let movieURL = info[.mediaURL] as? URL {
                 self.parent.movieURL = movieURL
                  
-                // Reset ToolbarSelections
-                ToolbarSelections.shared.saturationAmount = 1.0
-                ToolbarSelections.shared.brightnessAmount = 0.0
-                ToolbarSelections.shared.contrastAmount = 1.0
+//                // Reset ToolbarSelections
+//                ToolbarSelections.shared.saturationAmount = 1.0
+//                ToolbarSelections.shared.brightnessAmount = 0.0
+//                ToolbarSelections.shared.contrastAmount = 1.0
                 
                 // Setup GIF editing immediately after picking video
                 GIF.shared.movieURL = parent.movieURL
                 GIF.shared.generateFrames()
                 GIF.shared.originalFrameSize = GIF.shared.frames[0].size
                 GIF.shared.calculateContextRect()
+                GIF.shared.contextRect = .zero
+                GIF.shared.cropRectRatio = RectRatio()
+                
                 
                 // Reset GIF trim
-                GIF.shared.trimStart = 0
-                GIF.shared.trimEnd = GIF.shared.frames.count-1
+                GIF.shared.trimStart = -1
+                GIF.shared.trimEnd = -1
             }
         }
     }

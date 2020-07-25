@@ -27,11 +27,13 @@ struct RectRatio {
 enum TextFont {
     case montserrat
     case rubik
+    case roboto
+    case caveat
 }
 
 class TextOverlay: ObservableObject {
     var id = UUID()
-    @Published var text: String = "no text"
+    @Published var text: String = "Enter text"
     @Published var font: UIFont = UIFont(name: "Montserrat-Bold", size: 12) ?? UIFont.systemFont(ofSize: 12)
     @Published var fontSize: CGFloat = 12
     @Published var color: UIColor = .white

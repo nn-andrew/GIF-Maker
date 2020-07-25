@@ -29,7 +29,7 @@ struct TextOverlayView: View {
     
     @State var textOverlay: TextOverlay = TextOverlay()
     @State var textOverlayRectRatio: RectRatio = RectRatio()
-    @State var text: String = ToolbarSelections.shared.currentTextOverlay?.text ?? ""
+    var text: String = ToolbarSelections.shared.currentTextOverlay?.text ?? ""
     var font: UIFont = ToolbarSelections.shared.currentTextOverlay?.font ?? UIFont.systemFont(ofSize: 40)
 //    var font: UIFont = ToolbarSelections.shared.currentTextOverlay?.font ?? UIFont.systemFont(ofSize: 40)
     var fontSize: CGFloat = ToolbarSelections.shared.currentTextOverlay?.fontSize ?? 40
@@ -117,7 +117,7 @@ struct TextOverlayView: View {
                         }
                     )
                 
-                TextView(textOverlay: self.$textOverlay, text: self.$text, font: self.font, color: self.textColor, fontSize: self.fontSize)
+                TextView(textOverlay: self.$textOverlay, text: self.text, font: self.font, color: self.textColor, fontSize: self.fontSize)
                     .frame(
                         width: geo.size.width + self.offsetTR.width - self.offsetTL.width,
                         height: geo.size.height + self.offsetBL.height - self.offsetTL.height
@@ -312,7 +312,6 @@ struct TextOverlayView: View {
                 if self.toolbar.textOverlays.first(where: {$0.id == self.textOverlay.id}) == nil {
                     self.toolbar.currentTextOverlay = self.textOverlay
                 } else {
-                    self.text = self.textOverlay.text
                     self.assignOffsetsToSelf()
                     self.assignOffsetAccumulatesToSelf()
                     

@@ -25,8 +25,9 @@ struct EditView: View {
     var body: some View {
 //        NavigationView {
         ZStack {
-//                Colors.gray6
-//                    .edgesIgnoringSafeArea(.all)
+            Color.black
+                .edgesIgnoringSafeArea(.all)
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
             GeometryReader { geo in
                 VStack(spacing: 20) {
                     if self.currentMenu != .adjustment {
@@ -175,6 +176,7 @@ struct EditView: View {
                 
                 }
                 .frame(width: geo.size.width, height: geo.size.height)
+                .padding(.top, 20)
             }
             
             if self.pushFinishedView {
@@ -239,14 +241,14 @@ var trimView: some View {
                 .gesture(
                     DragGesture()
                         .onChanged { gesture in
-                            self.trimStartOffset.width = min(max(gesture.translation.width + self.trimStartOffsetAccumulate.width, 0), geo.size.width * 0.95 + self.trimEndOffset.width)
+                            self.trimStartOffset.width = min(max(gesture.translation.width + self.trimStartOffsetAccumulate.width, 0), geo.size.width * 0.95 + self.trimEndOffset.width * 1.05)
                             
                             self.pauseFrames()
                             self.trimStartFrameIndex = Int(self.trimStartOffset.width) * (GIF.shared.frames.count-1) / Int(geo.size.width)
                             self.frameIndex = self.trimStartFrameIndex
                         }
                         .onEnded { gesture in
-                            self.trimStartOffset.width = min(max(gesture.translation.width + self.trimStartOffsetAccumulate.width, 0.0), geo.size.width * 0.95 + self.trimEndOffset.width)
+                            self.trimStartOffset.width = min(max(gesture.translation.width + self.trimStartOffsetAccumulate.width, 0.0), geo.size.width * 0.95 + self.trimEndOffset.width * 1.05)
                             self.trimStartOffsetAccumulate = self.trimStartOffset
                             
                             GIF.shared.trimStart = self.trimStartFrameIndex
@@ -281,14 +283,14 @@ var trimView: some View {
                 .gesture(
                     DragGesture()
                         .onChanged { gesture in
-                            self.trimEndOffset.width = min(max(gesture.translation.width + self.trimEndOffsetAccumulate.width, -geo.size.width * 0.95 + self.trimStartOffset.width), 0)
+                            self.trimEndOffset.width = min(max(gesture.translation.width + self.trimEndOffsetAccumulate.width, -geo.size.width * 0.95 + self.trimStartOffset.width * 1.05), 0)
                             
                             self.pauseFrames()
                             self.trimEndFrameIndex = (GIF.shared.frames.count-1) + Int(self.trimEndOffset.width) * (GIF.shared.frames.count-1) / Int(geo.size.width)
                             self.frameIndex = self.trimEndFrameIndex
                         }
                         .onEnded { gesture in
-                            self.trimEndOffset.width = min(max(gesture.translation.width + self.trimEndOffsetAccumulate.width, -geo.size.width * 0.95 + self.trimStartOffset.width), 0)
+                            self.trimEndOffset.width = min(max(gesture.translation.width + self.trimEndOffsetAccumulate.width, -geo.size.width * 0.95 + self.trimStartOffset.width * 1.05), 0)
                             self.trimEndOffsetAccumulate = self.trimEndOffset
                             
                             GIF.shared.trimEnd = self.trimEndFrameIndex
@@ -347,10 +349,12 @@ var continueButton: some View {
         self.pushFinishedView = true
     }) {
         Text("Done")
+            .font(.headline)
             .foregroundColor(Color.white)
-            .padding(10)
+            .padding([.top, .bottom], 10)
+            .padding([.leading, .trailing], 20)
             .background(Colors.primary)
-            .cornerRadius(10)
+            .cornerRadius(4)
     }
 }
 
@@ -367,12 +371,14 @@ var previewView: some View {
     
     return GeometryReader { geo in
         ZStack {
-            Image(uiImage: GIF.shared.frames[self.frameIndex])
-                .resizable()
-                .scaledToFit()
-                .saturation(self.saturationAmount)
-                .brightness(self.brightnessAmount)
-                .contrast(self.contrastAmount)
+            if self.frameIndex < GIF.shared.frames.count {
+                Image(uiImage: GIF.shared.frames[self.frameIndex])
+                    .resizable()
+                    .scaledToFit()
+                    .saturation(self.saturationAmount)
+                    .brightness(self.brightnessAmount)
+                    .contrast(self.contrastAmount)
+            }
             
             if self.currentMenu == .crop {
                 CropView()
@@ -410,7 +416,12 @@ func playFrames() {
     self.timer = Timer.scheduledTimer(withTimeInterval: GIF.shared.frameDelay, repeats: true, block: { timer in
         if self.frameIndex >= self.trimEndFrameIndex {
             self.frameIndex = self.trimStartFrameIndex
-        } else {
+        }
+        else if self.trimStartFrameIndex >= GIF.shared.frames.count || self.trimEndFrameIndex >= GIF.shared.frames.count || self.trimStartFrameIndex < 0 || self.trimEndFrameIndex < 0 {
+            self.trimStartFrameIndex = 0
+            self.trimEndFrameIndex = GIF.shared.frames.count-1
+        }
+        else {
             self.frameIndex = (self.frameIndex + 1)
         }
     })

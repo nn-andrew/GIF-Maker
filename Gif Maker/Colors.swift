@@ -11,10 +11,12 @@ import SwiftUI
 
 class Colors {
     
-    static let primary = Color.green
+    static let primary = Colors.lightRed
     
     static let lightRed = Color(.sRGB, red: 255/255, green: 70/255, blue: 70/255)
     static let lightBlue = Color(.sRGB, red: 40/255, green: 120/255, blue: 255/255)
+    
+    static let green = Color(.sRGB, red: 36/255, green: 216/255, blue: 116/255)
     
     static let gray5 = Color(.systemGray5)
     static let gray6 = Color(.systemGray6)

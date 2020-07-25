@@ -15,35 +15,47 @@ struct FinishedView: View {
     @Binding var showFinishedView: Bool
     
     var body: some View {
-        ZStack {
-            Rectangle()
-                .fill(Color.black)
-                .edgesIgnoringSafeArea(.all)
-                .frame(maxWidth: .infinity, maxHeight: .infinity)
-            
-            VStack(spacing: 20) {
-                self.previewView
+        GeometryReader { geo in
+            ZStack {
+                Rectangle()
+                    .fill(Colors.gray6)
+                    .edgesIgnoringSafeArea(.all)
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
                 
-                Text("Congratulations! Your GIF is waiting in your camera roll.")
-                    .foregroundColor(Color.primary)
-                
-                Button(action: {
-                    self.showingImagePicker = true
+                VStack(spacing: 30) {
+                    self.previewView
+                    
+                    Text("Congratulations! Your GIF is waiting in your camera roll.")
+                        .foregroundColor(Color.primary)
+                    
+                    Button(action: {
+                        self.showingImagePicker = true
+                        
+                        self.pauseFrames()
+                    }) {
+                        Text("Import")
+                            .font(.headline)
+                            .foregroundColor(Color.white)
+                            .frame(width: geo.size.width * 0.5)
+                            .padding([.top, .bottom], 12)
+                            .background(Colors.primary)
+                            .cornerRadius(4)
+                        
+    //                    Image("import_button")
+    //                        .renderingMode(.original)
+    //                        .resizable()
+    //                        .scaledToFit()
+    //                        .frame(width: 100, height: 100)
+                    }
+                }
+                .padding(40)
+                .sheet(isPresented: self.$showingImagePicker, onDismiss: {
+                    if GIF.shared.frames != [] && self.showingImagePicker == false {
+                        self.showFinishedView = false
+                    }
                 }) {
-                    Text("Import new video")
-                        .foregroundColor(Color.white)
-                        .padding(10)
-                        .background(Colors.primary)
-                        .cornerRadius(10)
+                    ImagePicker(movieURL: self.$movieURL, showPicker: self.$showingImagePicker)
                 }
-            }
-            .padding(40)
-            .sheet(isPresented: self.$showingImagePicker, onDismiss: {
-                if GIF.shared.frames != [] && self.showingImagePicker == false {
-                    self.showFinishedView = false
-                }
-            }) {
-                ImagePicker(movieURL: self.$movieURL, showPicker: self.$showingImagePicker)
             }
         }
     }
@@ -61,7 +73,6 @@ struct FinishedView: View {
                 Image(uiImage: GIF.shared.frames[self.frameIndex])
                     .resizable()
                     .scaledToFit()
-                
             }
     //        .frame(width: geo.size.width, height: geo.size.height)
             .onAppear(perform: {
@@ -80,6 +91,10 @@ struct FinishedView: View {
                 self.frameIndex = (self.frameIndex + 1)
             }
         })
+    }
+    
+    func pauseFrames() {
+        self.timer?.invalidate()
     }
 }
 
