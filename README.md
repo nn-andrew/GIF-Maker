@@ -10,4 +10,6 @@ Current features include:
 3. Color adjustment
 4. Adding text and emojis
 
+App Store link: https://apple.co/2Djh1m7
+
 <img src="./IMG_4090.PNG" alt="preview of app" width="420">
