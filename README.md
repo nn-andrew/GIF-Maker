@@ -2,7 +2,7 @@
 
 ## What is GIF Maker?
 
-GIF Maker is a video-to-GIF converter and editor. Select a video from your camera roll and begin editing!
+GIF Maker is a video-to-GIF converter and editor. Select a video from your camera roll and start editing!
 
 Current features include:
 1. Trimming
@@ -10,4 +10,4 @@ Current features include:
 3. Color adjustment
 4. Adding text and emojis
 
-<img src="./IMG_3947.PNG" alt="preview of app" width="360">
+<img src="./IMG_4090.PNG" alt="preview of app" width="420">
