@@ -12,4 +12,6 @@ Current features include:
 
 App Store link: https://apple.co/2Djh1m7
 
+Demo: https://imgur.com/gallery/KRsNLoZ
+
 <img src="./IMG_4090.PNG" alt="preview of app" width="420">
